@@ -1,5 +1,7 @@
 # FastAPI kafka
 
+Tuto from: https://ahmed-nafies.medium.com/fastapi-event-driven-development-with-kafka-zookeeper-and-docker-compose-a-step-by-step-guide-3e07151c3e4d
+
 ## run
 
 ```bash

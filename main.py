@@ -4,8 +4,8 @@ from typing import List, Optional
 from kafka import KafkaProducer
 import json
 
-app = FastAPI()
-producer = KafkaProducer(bootstrap_servers='kafka:29092', value_serializer=lambda v: v, key_serializer=lambda v: json.dumps(v))
+app = FastAPI(version="0.0.4")
+producer = KafkaProducer(bootstrap_servers='kafka:29092', key_serializer=lambda v: v.encode('utf-8'), value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 class Item(BaseModel):
     id: int
