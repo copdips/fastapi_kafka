@@ -1,4 +1,4 @@
-FROM python:3.10.5-slim-buster AS builder
+FROM python:3.11-slim AS builder
 
 ENV POETRY_VERSION=1.3.2 \
     POETRY_NO_INTERACTION=1 \
@@ -7,6 +7,9 @@ ENV POETRY_VERSION=1.3.2 \
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
 WORKDIR /build
+
+# Add docker-compose-wait tool -------------------
+COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
 
 COPY poetry.lock pyproject.toml  ./
 
@@ -21,12 +24,8 @@ RUN poetry export \
 RUN pip install --prefix /local --no-cache-dir pip && \
     pip install --prefix /local -I --no-cache-dir -r requirements.txt
 
-# Add docker-compose-wait tool -------------------
-ENV WAIT_VERSION 2.7.2
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
-RUN chmod +x /wait
 
-FROM python:3.10.5-slim-buster
+FROM python:3.11-slim
 ENV PYTHONUNBUFFERED=1
 RUN useradd -d /app --create-home app
 COPY --from=builder /local/ /usr/local
